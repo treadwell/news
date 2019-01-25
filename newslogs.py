@@ -22,9 +22,18 @@ top_authors_query = """
         """
 
 top_error_days_query = """
-        (select date(time) as day, count(*) as hits
-        from log
-        group by day) as requests
+        select requests.day as day, errors.hits / requests.hits as err_pcnt
+        from
+            (select date(time) as day, count(*) as hits
+            from log
+            group by day) as requests,
+
+            (select date(time) as day, count(*) as hits
+            from log
+            where status like '%404%'
+            group by day) as errors
+        where requests.day = errors.day
+        order by err_pcnt desc
         """
 
 def query_db(query):
