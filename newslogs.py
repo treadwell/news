@@ -22,7 +22,8 @@ top_authors_query = """
         """
 
 top_error_days_query = """
-        select requests.day as day, errors.hits / requests.hits as err_pcnt
+        select requests.day as day,
+            100 * (cast (errors.hits as float) / requests.hits) as err_pcnt
         from
             (select date(time) as day, count(*) as hits
             from log
