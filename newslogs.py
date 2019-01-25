@@ -3,7 +3,7 @@
 import psycopg2
 
 top_articles_query = """
-        select title, count(title) as num
+        select title, cast(count(title) as integer) as num
         from articles join log
         on articles.slug = substring(log.path, 10)
         group by title
@@ -50,6 +50,16 @@ def query_db(query):
 
 
 if __name__ == "__main__":
-    # print(query_db(top_articles_query))
-    # print(query_db(top_authors_query))
-    print(query_db(top_error_days_query))
+
+    print("What are the most popular three articles of all time?")
+    for a in query_db(top_articles_query):
+        print('\t"{}" - {} views'.format(a[0], a[1]))
+
+    print("Who are the most popular article authors of all time?")
+    for a in query_db(top_authors_query):
+        print('\t{} - {} views'.format(a[0], a[1]))
+
+    print("On which days did more than 1% of requests lead to errors?")
+    for a in query_db(top_error_days_query):
+        # print("\t" + "%s - %d" % (a[0], a[1]) + " percent")
+        print('\t{} - {} percent'.format(a[0], a[1]))
