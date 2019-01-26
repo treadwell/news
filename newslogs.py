@@ -61,5 +61,4 @@ if __name__ == "__main__":
 
     print("\nOn which days did more than 1% of requests lead to errors?")
     for a in query_db(top_error_days_query):
-        # print("\t" + "%s - %d" % (a[0], a[1]) + " percent")
-        print('\t{} - {} percent'.format(a[0], a[1]))
+        print('\t{} - {}% errors'.format(a[0], a[1]))
