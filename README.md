@@ -1,10 +1,10 @@
-# Project: Logs Analsysis
+# Project: Logs Analysis
 
 ## Description
 
 The project code performs three queries on a supplied
-database of news articles. The database 'news' consists of
-three tables, 'articles', 'authors', 'logs'. Queries
+database of news articles. The database `news` consists of
+three tables, `articles`, `authors`, `logs`. Queries
 include:
 
 1. What are the most popular three articles of all time?
