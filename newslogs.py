@@ -18,11 +18,11 @@ top_authors_query = """
             articles.author = authors.id
         group by authors.name
         order by num desc
-        limit 3
+        limit 4
         """
 
 top_error_days_query = """
-        select day, err_pcnt
+        select to_char(day, 'Mon DD, YYY'), err_pcnt
         from
             (select requests.day as day,
                 round(100 * (cast (errors.hits as numeric) / requests.hits), 2) as err_pcnt
@@ -55,11 +55,11 @@ if __name__ == "__main__":
     for a in query_db(top_articles_query):
         print('\t"{}" - {} views'.format(a[0], a[1]))
 
-    print("Who are the most popular article authors of all time?")
+    print("\nWho are the most popular article authors of all time?")
     for a in query_db(top_authors_query):
         print('\t{} - {} views'.format(a[0], a[1]))
 
-    print("On which days did more than 1% of requests lead to errors?")
+    print("\nOn which days did more than 1% of requests lead to errors?")
     for a in query_db(top_error_days_query):
         # print("\t" + "%s - %d" % (a[0], a[1]) + " percent")
         print('\t{} - {} percent'.format(a[0], a[1]))
