@@ -25,7 +25,8 @@ top_error_days_query = """
         select to_char(day, 'Mon DD, YYY'), err_pcnt
         from
             (select requests.day as day,
-                round(100 * (cast (errors.hits as numeric) / requests.hits), 2) as err_pcnt
+                round(100 * (cast (errors.hits as numeric) /
+                requests.hits), 2) as err_pcnt
             from
                 (select date(time) as day, count(*) as hits
                 from log
@@ -40,13 +41,22 @@ top_error_days_query = """
         where err_pcnt > 1
         """
 
+
 def query_db(query):
-    db = psycopg2.connect("dbname=news")
-    c = db.cursor()
-    c.execute(query)
-    results = c.fetchall()
-    db.close()
-    return results
+    try:
+        db = psycopg2.connect("dbname=news")
+        c = db.cursor()
+        c.execute(query)
+        results = c.fetchall()
+        db.close()
+        return results
+    except pyscopg2.DatabaseError as e:
+        if db:
+            db.rollback()
+        print("Error is {}".format(e))
+    finally:
+        if db:
+            db.close()
 
 
 if __name__ == "__main__":
