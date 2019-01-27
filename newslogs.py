@@ -50,7 +50,7 @@ def query_db(query):
         results = c.fetchall()
         db.close()
         return results
-    except pyscopg2.DatabaseError as e:
+    except pyscopg2.Error as e:
         if db:
             db.rollback()
         print("Error is {}".format(e))
